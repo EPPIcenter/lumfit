@@ -86,20 +86,19 @@
 #'
 #' @export
 
-processLumi <- function(antigen, fname, fdir = NULL, plotdir = NULL,
-                        xvar = "logConc", yvar = "logMFI", model = "sigmoid",
-                        Alow = NULL, asym = TRUE, trim.flat = TRUE,
-                        interactive = TRUE, monot.prompt = FALSE,
-                        rm.before = FALSE, rm.after = interactive, maxrm = 2,
-                        set.bounds = interactive, overwrite.bounds = FALSE,
-                        ifix = NULL, dtype = "Median",
-                        stdstr = "std|stand|1/", bgstr  = "blank|background",
-                        stddil = NULL, smpdil = 1000, optmethod = "Nelder-Mead",
-                        maxit = 5e3, nwells = NULL, nsep = 2, ncolmax = 105,
-                        # if here, these will need to be included in fitStd:
-                        #                         nv3 = 10, nv4 = 100,
-                        width = 6, height = 6, ptcol = "firebrick3",
-                        rugcols = c("cadetblue", "purple", "red"), ...) {
+processLum <- function(antigen, fname, fdir = NULL, plotdir = NULL,
+                       xvar = "logConc", yvar = "logMFI", model = "sigmoid",
+                       Alow = NULL, asym = TRUE, trim.flat = TRUE,
+                       interactive = TRUE, monot.prompt = FALSE,
+                       rm.before = FALSE, rm.after = interactive, maxrm = 2,
+                       set.bounds = interactive, overwrite.bounds = FALSE,
+                       ifix = NULL, dtype = "Median", stdstr = "std|stand|1/",
+                       bgstr  = "blank|background", stddil = NULL,
+                       smpdil = 1000, optmethod = "Nelder-Mead", maxit = 5e3,
+                       nwells = NULL, nsep = 2, ncolmax = 105,
+                       # nv3 = 10, nv4 = 100, # then include in fitStd() as well
+                       width = 6, height = 6, ptcol = "firebrick3",
+                       rugcols = c("cadetblue", "purple", "red"), ...) {
   MFI <- read_data(paste(fdir, fname, sep = ""), dtype, nwells, nsep, ncolmax)
   pdate <- read.csv(paste(fdir, fname, sep = ""), header = FALSE, skip = 2,
                     nrow = 1)[1, 2]

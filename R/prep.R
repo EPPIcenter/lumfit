@@ -44,7 +44,7 @@ extractStd <- function(MFI, stdstr, bgstr, dilut, smpdil, antigen, yvar) {
 #'
 #' details
 #'
-#' @inherit processLumi params
+#' @inherit processLum params
 #'
 #' @return A data frame containing data for all the antigens in the file.
 #'
