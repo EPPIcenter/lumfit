@@ -11,7 +11,8 @@ extractStd(MFI, stdstr, bgstr, dilut, smpdil, antigen, yvar)
 standard concentrations in "1/dilution" format (e.g. "1/200").}
 
 \item{stdstr}{character string indicating standards in the file's "Sample"
-column. Not case sensitive.}
+column. Not case sensitive. If \code{""} (empty string), standards will be
+determined by the pattern "1/" only.}
 
 \item{bgstr}{character string indicating background in the file's "Sample"
 column. Not case sensitive.}

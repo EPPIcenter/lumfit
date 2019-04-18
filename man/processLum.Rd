@@ -9,7 +9,7 @@ processLum(antigen, fname, fdir = NULL, plotdir = NULL,
   Alow = NULL, asym = TRUE, trim.flat = TRUE, interactive = TRUE,
   monot.prompt = FALSE, rm.before = FALSE, rm.after = interactive,
   maxrm = 2, set.bounds = interactive, overwrite.bounds = FALSE,
-  ifix = NULL, dtype = "Median", stdstr = "std|stand|1/",
+  ifix = NULL, dtype = "Median", stdstr = "std|stand",
   bgstr = "blank|background", stddil = NULL, smpdil = 1000,
   optmethod = "Nelder-Mead", maxit = 5000, nwells = NULL, nsep = 2,
   ncolmax = 105, width = 6, height = 6, ptcol = "firebrick3",
@@ -80,7 +80,8 @@ used for getting starting values for optimization.}
 \item{dtype}{character string for data type in the file.}
 
 \item{stdstr}{character string indicating standards in the file's "Sample"
-column. Not case sensitive.}
+column. Not case sensitive. If \code{""} (empty string), standards will be
+determined by the pattern "1/" only.}
 
 \item{bgstr}{character string indicating background in the file's "Sample"
 column. Not case sensitive.}

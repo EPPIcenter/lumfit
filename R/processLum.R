@@ -51,7 +51,8 @@
 #'   used for getting starting values for optimization.
 #' @param dtype character string for data type in the file.
 #' @param stdstr character string indicating standards in the file's "Sample"
-#'   column. Not case sensitive.
+#'   column. Not case sensitive. If \code{""} (empty string), standards will be
+#'   determined by the pattern "1/" only.
 #' @param bgstr character string indicating background in the file's "Sample"
 #'   column. Not case sensitive.
 #' @param stddil a vector of standard dilutions. If \code{NULL}, dilutions are
@@ -92,7 +93,7 @@ processLum <- function(antigen, fname, fdir = NULL, plotdir = NULL,
                        interactive = TRUE, monot.prompt = FALSE,
                        rm.before = FALSE, rm.after = interactive, maxrm = 2,
                        set.bounds = interactive, overwrite.bounds = FALSE,
-                       ifix = NULL, dtype = "Median", stdstr = "std|stand|1/",
+                       ifix = NULL, dtype = "Median", stdstr = "std|stand",
                        bgstr  = "blank|background", stddil = NULL,
                        smpdil = 1000, optmethod = "Nelder-Mead", maxit = 5e3,
                        nwells = NULL, nsep = 2, ncolmax = 105,
@@ -100,18 +101,17 @@ processLum <- function(antigen, fname, fdir = NULL, plotdir = NULL,
                        width = 6, height = 6, ptcol = "firebrick3",
                        rugcols = c("cadetblue", "purple", "red"), ...) {
   MFI <- read_data(paste(fdir, fname, sep = ""), dtype, nwells, nsep, ncolmax)
+  if (length(grep("1/", MFI$Sample)) == 0) {
+    stop('Please provide standard concentrations in "1/dilution" format,
+         e.g "1/200"')
+  }
   pdate <- read.csv(paste(fdir, fname, sep = ""), header = FALSE, skip = 2,
                     nrow = 1)[1, 2]
   pdate <- as.Date(as.character(pdate), "%m/%d/%Y")
-  if (nchar(stdstr) > 0 && length(grep(stdstr, MFI$Sample)) < 1) {
-    warning(paste("File", fname, "doesn't contain", stdstr, "standards"))
-    fitflag <- paste("no_std_", stdstr, sep = "")
-    dfout          <- MFI[, 1:2]
-    dfout$logMFI   <- log(MFI[, grep(antigen, colnames(MFI))])
-    dfout$Dilution <- NA
-    return(list(smps = normalizeSmp(dfout, antigen, fname, pdate, FUNinv, NULL,
-                                    NULL, fitflag, trim.flat),
-                fitflag = fitflag))
+  if (nchar(stdstr) > 0 && length(grep(stdstr, MFI$Sample)) == 0) {
+    warning(paste("File ", fname, " doesn't contain", stdstr, "; using
+                  '1/' to determine standards", sep = ""))
+    stdstr <- ""
   }
   ctrl <- extractStd(MFI, stdstr, bgstr, stddil, smpdil, antigen, yvar)
   std <- ctrl$std
