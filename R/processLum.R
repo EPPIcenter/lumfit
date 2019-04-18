@@ -109,8 +109,8 @@ processLum <- function(antigen, fname, fdir = NULL, plotdir = NULL,
                     nrow = 1)[1, 2]
   pdate <- as.Date(as.character(pdate), "%m/%d/%Y")
   if (nchar(stdstr) > 0 && length(grep(stdstr, MFI$Sample)) == 0) {
-    warning(paste("File ", fname, " doesn't contain '", stdstr, "'; using
-                  '1/' to determine standards", sep = ""))
+    warning(paste("File ", fname, ' does not contain "', stdstr, '"; using
+                  "1/" to determine standards', sep = ""))
     stdstr <- ""
   }
   ctrl <- extractStd(MFI, stdstr, bgstr, stddil, smpdil, antigen, yvar)
