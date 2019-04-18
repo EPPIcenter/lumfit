@@ -1,3 +1,20 @@
+#' Extract Stdandards
+#'
+#' Separates specified serial dilutions for fitting, background, and samples
+#'
+#' details
+#'
+#' @param MFI data frame with variable "Sample" that contains information about
+#'   standard concentrations in "1/dilution" format (e.g. "1/200").
+#' @param dilut standard dilutions to use for standard curve fitting. If
+#'   \code{NULL}, all the dilutions indicated in a "Sample" variable are used.
+#' @inherit processLum params
+#'
+#' @return A list with standards for fitting, background values, sample values,
+#'   indices for samples, and a data frame - for a specified antigen.
+#'
+#' @export
+
 extractStd <- function(MFI, stdstr, bgstr, dilut, smpdil, antigen, yvar) {
   mfi <- suppressWarnings(as.numeric(MFI[, grep(antigen, colnames(MFI))]))
   istd <- grep("1/", MFI$Sample)
