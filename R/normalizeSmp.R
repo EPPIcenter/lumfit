@@ -45,5 +45,8 @@ normalizeSmp <- function(dfout, antigen, fname, pdate, yvar, FUNinv, par,
   smps$Conc[ilo]  <- exp(FUNinv(smps$trim_lo[1],  par))*smps$Dilution[ilo]
   smps$Conc[iup]  <- exp(FUNinv(smps$trim_up[1],  par))*smps$Dilution[iup]
   smps$Conc[imid] <- exp(FUNinv(smps[imid, yvar], par))*smps$Dilution[imid]
+  # optional - for convenience (redundant)
+  smps$trimmed              <- FALSE
+  smps$trimmed[c(ilo, iup)] <- TRUE
   return(smps)
 }
