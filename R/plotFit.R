@@ -29,13 +29,12 @@ plotFit <- function(xvar, yvar, std, fitpar = NULL, FUNmod = NULL, iout = NULL,
   }
   if (!is.null(trimval)) {
     abline(h = trimval, col = rugcols[2:3][trimext], lty = 4)
-    legend("right", box.col = "white", #bg = "white",
-           cex = 0.9,
-           col = rugcols[3:2], lty = 4, lwd = 1.5, #*** inset = 0.05, #check!!!
+    legend("right", inset = 0.05, box.col = "white", bg = "white", cex = 0.9,
+           col = rugcols[3:2], lty = 4, lwd = 1.5,
            title = "trimmed at", legend = c("extrema", "bounds"))
   }
   if (is.null(fitpar)) {
-    legend("bottom", inset = 0.05, box.col = "grey", box.lwd = 0.8,
+    legend("bottom", inset = 0.2, box.col = "grey", box.lwd = 0.8,
            bg = "white", cex = 0.9, col = c(ptcol, 1), lty = c(NA, 3),
            lwd = c(1.5, 1), pch = c(1, NA),
            legend = c("standards", "background"))
