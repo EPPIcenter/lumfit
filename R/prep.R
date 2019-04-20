@@ -24,8 +24,9 @@ extractStd <- function(MFI, stdstr, bgstr, dilut, smpdil, antigen, yvar) {
   }
   if (stdstr != "") {
     istd <- istd[grep(tolower(stdstr), tolower(MFI$Sample)[istd])]
-    if (length(istd) == 0) {
-      stop('No standards matching stdstr')
+    if (length(istd) == 0) {  # handled by processLum(); for standalone use only
+      # no warning, back to original istd
+      istd <- grep("1/", MFI$Sample)
     }
   }
   sname <- MFI$Sample[istd]
@@ -53,7 +54,7 @@ extractStd <- function(MFI, stdstr, bgstr, dilut, smpdil, antigen, yvar) {
   dfout$Dilution[istd] <- sdilut
   return(list(std = std, bg = bg, out = dfout, smp = dfout[ismp, yvar],
               ismp = ismp))
-  }
+}
 
 #' Read Raw File
 #'
