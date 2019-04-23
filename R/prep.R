@@ -18,7 +18,7 @@
 extractStd <- function(MFI, stdstr, bgstr, dilut, smpdil, antigen, yvar) {
   mfi <- suppressWarnings(as.numeric(MFI[, grep(antigen, colnames(MFI))]))
   istd <- grep("1/", MFI$Sample)
-  if (length(istd) == 0) {
+  if (length(istd) == 0) {    # handled by processLum(); for standalone use only
     stop('Please provide standard concentrations in "1/dilution" format,
          e.g "1/200"')
   }

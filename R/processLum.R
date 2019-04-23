@@ -64,6 +64,7 @@
 #' @param nwells number of wells. If \code{NULL}, inferred from the file.
 #' @param nsep number of lines separating different data types in the file.
 #' @param ncolmax maximum number of columns in the file.
+#' @param dformat date format in the file.
 #' @param width,height optional parameters for the final saved plot.
 #' @param ptcol color of the standard points on the plot.
 #' @param rugcols vector of three colors for the rugplot, which indicates sample
@@ -98,16 +99,19 @@ processLum <- function(antigen, fname, fdir = NULL, plotdir = NULL,
                        smpdil = 1000, optmethod = "Nelder-Mead", maxit = 5e3,
                        nwells = NULL, nsep = 2, ncolmax = 105,
                        # nv3 = 10, nv4 = 100, # then include in fitStd() as well
-                       width = 6, height = 6, ptcol = "firebrick3",
+                       dformat = "%m/%d/%Y", width = 6, height = 6,
+                       ptcol = "firebrick3",
                        rugcols = c("cadetblue", "purple", "red"), ...) {
+  options(warn = 1)    # for interactivity
   MFI <- read_data(paste(fdir, fname, sep = ""), dtype, nwells, nsep, ncolmax)
   if (length(grep("1/", MFI$Sample)) == 0) {
     stop('Please provide standard concentrations in "1/dilution" format,
          e.g "1/200"')
   }
-  pdate <- read.csv(paste(fdir, fname, sep = ""), header = FALSE, skip = 2,
+  fdate <- read.csv(paste(fdir, fname, sep = ""), header = FALSE, skip = 2,
                     nrow = 1)[1, 2]
-  pdate <- as.Date(as.character(pdate), "%m/%d/%Y")
+  pdate <- as.Date(as.character(fdate), format = dformat)
+  if (is.na(pdate)) pdate <- fdate  #*** optionally - issue a warning?
   if (nchar(stdstr) > 0 && length(grep(stdstr, MFI$Sample)) == 0) {
     warning(paste("File ", fname, ' does not contain "', stdstr, '"; using
                   "1/" to determine standards', sep = ""))
@@ -148,5 +152,6 @@ processLum <- function(antigen, fname, fdir = NULL, plotdir = NULL,
             main = main, ylab = yvar, xlab = "Concentration", ...)
   }
   dev.off()
+  options(warn = 0)
   return(list(smps = smps, fitflag = finfit$flag))
 }

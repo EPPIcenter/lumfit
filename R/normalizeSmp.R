@@ -1,6 +1,8 @@
 normalizeSmp <- function(dfout, antigen, fname, pdate, yvar, FUNinv, par,
                          bounds, fitflag, trim.flat = TRUE) {
   smps             <- dfout
+  smps$Conc        <- NA
+  smps$trimmed     <- FALSE                 # for convenience (redundant)
   smps$antigen     <- antigen
   smps$file_name   <- fname
   smps$flagged_run <- fitflag
@@ -10,7 +12,6 @@ normalizeSmp <- function(dfout, antigen, fname, pdate, yvar, FUNinv, par,
   smps$lower_bound <- bounds["lowerbound"]  # if NA, good - no flat portion
   smps$upper_bound <- bounds["upperbound"]
   smps$Flag        <- ""
-  smps$Conc        <- NA
   if (is.null(par)) {
     smps$trim_lo <- smps$trim_up <- NA
     return(smps)
@@ -45,8 +46,6 @@ normalizeSmp <- function(dfout, antigen, fname, pdate, yvar, FUNinv, par,
   smps$Conc[ilo]  <- exp(FUNinv(smps$trim_lo[1],  par))*smps$Dilution[ilo]
   smps$Conc[iup]  <- exp(FUNinv(smps$trim_up[1],  par))*smps$Dilution[iup]
   smps$Conc[imid] <- exp(FUNinv(smps[imid, yvar], par))*smps$Dilution[imid]
-  # optional - for convenience (redundant)
-  smps$trimmed              <- FALSE
   smps$trimmed[c(ilo, iup)] <- TRUE
   return(smps)
 }

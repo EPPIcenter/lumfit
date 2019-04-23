@@ -27,10 +27,10 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
     plotFit(xvar, yvar, std, bg = bg, smp = smp,
             ylab = yvar, xlab = "Concentration", ...)
     for (i in 1:maxrm) {
-      ans1 <- readline("\nRemove any outliers? (y/n) ")
+      ans1 <- readline("Remove any outliers? (y/n) ")
       if (tolower(ans1) == "y"){
         flag <- "pts_rm"
-        mtext("Click on an outlier", col = "red", cex = 1.5)
+        mtext("Click on an outlier", col = "red", cex = 1.2)
         outlier <- locator(n = 1)
         iout <- c(iout, locatePt(outlier$x, outlier$y, std[, xvar], std[, yvar]))
         points(std[iout, xvar], std[iout, yvar], col = 2, pch = 4, cex = 2)
@@ -49,7 +49,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
       startval <- getStart3par(std1[, xvar], std1[, yvar], Alow, ifix = ifix)
       if (is.na(startval[1]) ) {
         warning("Unable to fit the model with provided value for Alow")
-        ans <- readline("Estimate lower asymptote (recommended)? (y/n)")
+        ans <- readline("Estimate lower asymptote (recommended)? (y/n) ")
         if (grepl("y", tolower(ans))) {
           Alow <- NULL
         } else {
@@ -84,7 +84,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
   revise <- rm.after
   if (revise) {
     fit.orig  <- fitpar         # save original fitpar and iout from rm.before
-    iout.orig <- iout           #*** document - if out at rm.before, that's it
+    iout.orig <- iout           # if out at rm.before, that's it
   }
 
   while (revise) {
@@ -95,10 +95,10 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
             smp = smp, ylab = yvar, xlab = "Concentration", ...)
 
     for (i in 1:maxrm) {
-      ans1 <- readline("\nRemove any outliers? (y/n) ")
+      ans1 <- readline("Remove any outliers? (y/n) ")
       if (tolower(ans1) == "y"){
         flag <- "pts_rm"
-        mtext("Click on an outlier", col = "red", cex = 1.5)
+        mtext("Click on an outlier", col = "red", cex = 1.2)
         out  <- locator(n = 1)
         iout <- c(iout, locatePt(out$x, out$y, std[, xvar], std[, yvar]))
         points(std[iout, xvar], std[iout, yvar], col = 2, pch = 4, cex = 2)
@@ -137,8 +137,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
       ans2 <- readline("Revise fit? (y/n) ")
       if (tolower(ans2) == "n") {
         revise <- FALSE
-        ans3 <- readline(paste("Update the existing", flag, "flag?
-                               (type a new message or 'n' for no) "))
+        ans3 <- readline(paste("Update the existing", flag, "flag? (type a new message or 'n' for no) "))
         if (tolower(ans3) != "n") {
           flag <- ans3
         }
@@ -191,7 +190,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
         }
       }
       while (revise) {
-        mtext("Indicate lower bound with a click", col = "red", cex = 1.5)
+        mtext("Indicate lower bound with a click", col = "red", cex = 1.2)
         bounds["lowerbound"] <- locator(n = 1)$y
         plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,
                 iout = iout, bg = bg, smp = smp,
@@ -223,7 +222,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
         }
       }
       while (revise) {
-        mtext("Indicate upper bound with a click", col = "red", cex = 1.5)
+        mtext("Indicate upper bound with a click", col = "red", cex = 1.2)
         bounds["upperbound"] <- locator(n = 1)$y
         plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,
                 iout = iout, bg = bg, smp = smp,

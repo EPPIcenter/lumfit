@@ -12,8 +12,8 @@ processLum(antigen, fname, fdir = NULL, plotdir = NULL,
   ifix = NULL, dtype = "Median", stdstr = "std|stand",
   bgstr = "blank|background", stddil = NULL, smpdil = 1000,
   optmethod = "Nelder-Mead", maxit = 5000, nwells = NULL, nsep = 2,
-  ncolmax = 105, width = 6, height = 6, ptcol = "firebrick3",
-  rugcols = c("cadetblue", "purple", "red"), ...)
+  ncolmax = 105, dformat = "\%m/\%d/\%Y", width = 6, height = 6,
+  ptcol = "firebrick3", rugcols = c("cadetblue", "purple", "red"), ...)
 }
 \arguments{
 \item{antigen}{character string.}
@@ -101,6 +101,8 @@ exclude some dilutions from model fitting.}
 \item{nsep}{number of lines separating different data types in the file.}
 
 \item{ncolmax}{maximum number of columns in the file.}
+
+\item{dformat}{date format in the file.}
 
 \item{width, height}{optional parameters for the final saved plot.}
 
