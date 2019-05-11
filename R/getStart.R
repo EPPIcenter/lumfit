@@ -15,6 +15,9 @@ getStart4par <- function(x, y, ifix = NULL, nv = 100) {
   if (is.null(ifix)) ifix <- c(1, ceiling(n/2), n)
   yshift <- y - y[ifix[1]]  # first subtracted
   b <- yshift[ifix[3]]/yshift[ifix[2]]
+  if (!is.finite(b)) {
+    return(NA)
+  }
   ivar <- setdiff(1:n, ifix)
   xfix <- x[ifix]
 

@@ -47,7 +47,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
     FUNmod <- fsig
     if (!is.null(Alow)) {  # lower asymptote fixed
       startval <- getStart3par(std1[, xvar], std1[, yvar], Alow, ifix = ifix)
-      if (is.na(startval[1]) ) {
+      if (is.na(startval[1])) {
         warning("Unable to fit the model with provided value for Alow")
         ans <- readline("Estimate lower asymptote (recommended)? (y/n) ")
         if (grepl("y", tolower(ans))) {
