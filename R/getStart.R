@@ -34,8 +34,12 @@ getStart4par <- function(x, y, ifix = NULL, nv = 100) {
   if (ss[imin] >= (n - 3)*(mean(abs(diff(y)))/2)^2) {
     return(NA)
   }
-  aa <- (ss[imin + 1] + ss[imin - 1] - 2*ss[imin]) * 5000  # a in quadratic equation
-  vmin <- vval[imin] - (ss[imin + 1] - ss[imin - 1])*25/aa
+  if (imin %in% c(1, nv - 1)) {
+    vmin <- vval[imin]                                       # not a good fit
+  } else {
+    aa <- (ss[imin + 1] + ss[imin - 1] - 2*ss[imin]) * 5000  # a in quad eqn
+    vmin <- vval[imin] - (ss[imin + 1] - ss[imin - 1])*25/aa
+  }
   rmin <- vtoA(yshift, vmin, b, xfix, ifix)
   if (rmin$w <= 0) {
     return(NA)
