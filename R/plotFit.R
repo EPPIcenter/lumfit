@@ -1,6 +1,8 @@
-locatePt <- function(x, y, datx, daty) {
-  indmin <- which.min(abs(x - datx))
-  indmin[which.min(abs(y - daty[indmin]))]
+
+locatePt <- function(ptx, pty, datx, daty) {
+  absdif <- abs(ptx - datx)
+  indmin <- which(absdif == min(absdif))       # multiple
+  indmin[which.min(abs(pty - daty[indmin]))]   # single
 }
 
 plotFit <- function(xvar, yvar, std, fitpar = NULL, FUNmod = NULL, iout = NULL,

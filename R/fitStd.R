@@ -31,8 +31,8 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
       if (tolower(ans1) == "y"){
         flag <- "pts_rm"
         mtext("Click on an outlier", col = "red", cex = 1.2)
-        outlier <- locator(n = 1)
-        iout <- c(iout, locatePt(outlier$x, outlier$y, std[, xvar], std[, yvar]))
+        out  <- locator(n = 1)
+        iout <- c(iout, locatePt(out$x, out$y, std[, xvar], std[, yvar]))
         points(std[iout, xvar], std[iout, yvar], col = 2, pch = 4, cex = 2)
       } else {
         break
