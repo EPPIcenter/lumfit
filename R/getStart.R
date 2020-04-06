@@ -7,7 +7,7 @@ vtoA <- function(ys, v, b, xfix, ifix) {
   return(list(A = A, w = w))  # list append names later
 }
 
-getStart4par <- function(x, y, ifix = NULL, nv = 100) {
+getStart4par <- function(x, y, ifix = NULL, nv = 10, info = "") {
   y <- tapply(y, x, mean, names = NULL)  # tapply output is ordered by x
   names(y) <- NULL
   x <- sort(unique(x))
@@ -26,7 +26,7 @@ getStart4par <- function(x, y, ifix = NULL, nv = 100) {
   for(i in 1:(nv - 1)) {
     v <- vval[i]
     r <- vtoA(yshift, v, b, xfix, ifix)
-    ss[i] <- sum(((yshift[ivar]) - r$A*(1/(1 + r$w*v^(x[ivar])) -
+    ss[i] <- sum((yshift[ivar] - r$A*(1/(1 + r$w*v^(x[ivar])) -
                                           1/(1 + r$w*v^(xfix[1]))))^2)
   }
   imin <- which.min(ss)
@@ -41,7 +41,20 @@ getStart4par <- function(x, y, ifix = NULL, nv = 100) {
     vmin <- vval[imin] - (ss[imin + 1] - ss[imin - 1])*25/aa
   }
   rmin <- vtoA(yshift, vmin, b, xfix, ifix)
-  if (rmin$w <= 0) {
+
+  #***=========== optional update to provide fit even if A, w <= 0 =========***#
+  if (rmin$w <= 0) {    # then A <= 0
+    warning(paste(info, "Potential fit problem, manual check recommended"))
+    high <- imin >= nv/2
+    while(rmin$w <= 0) {
+      imin <- high*(imin - 1) + (!high)*(imin + 1)  # increment/decrement imin
+      vmin <- vval[imin]
+      rmin <- vtoA(yshift, vmin, b, xfix, ifix)
+    }
+  }
+  #============================================================================#
+
+  if (rmin$w <= 0) {  #*** possibly unnecessary with the update?
     return(NA)
   }
   A0 <- y[ifix[1]] - rmin$A/(1 + rmin$w*vmin^(xfix[1]))

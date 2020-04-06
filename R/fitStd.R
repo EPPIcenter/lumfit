@@ -48,7 +48,8 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
     if (!is.null(Alow)) {  # lower asymptote fixed
       startval <- getStart3par(std1[, xvar], std1[, yvar], Alow, ifix = ifix)
       if (is.na(startval[1])) {
-        warning("Unable to fit the model with provided value for Alow")
+        warning(paste(info,
+                      "Unable to fit the model with provided value for Alow"))
         ans <- readline("Estimate lower asymptote (recommended)? (y/n) ")
         if (grepl("y", tolower(ans))) {
           Alow <- NULL
@@ -58,7 +59,8 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
       }
     }
     if (is.null(Alow)) {  # lower asymptote not fixed (originally or later)
-      startval <- getStart4par(std1[, xvar], std1[, yvar], ifix = ifix)
+      startval <- getStart4par(std1[, xvar], std1[, yvar], ifix = ifix,
+                               info = info)
     }
   } else {  # model 5 (6 parameters) *** update when available
     FUNmod <- flin
@@ -91,8 +93,17 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
     flag <- ""
     fitpar  <- fit.orig         # restore original fit and iout
     iout    <- iout.orig
-    plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,
-            smp = smp, ylab = yvar, xlab = "Concentration", ...)
+    #*** INSERTED - is it a useful functionality?
+    smpflag <- rep("", length(smp))
+    mindet <- max(min(std1[, yvar]), fitpar["Alow"])
+    maxdet <- min(max(std1[, yvar]), fitpar["Aup"])
+    smpflag[!(mindet <= smp & smp <= maxdet)] <- "min"
+    plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,  #***
+            smp = smp, smpflag = smpflag, ylab = yvar, xlab = "Concentration", ...)
+    #*** end INSERTED, uncomment plotFit() below
+
+#    plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,  #***
+#            smp = smp, ylab = yvar, xlab = "Concentration", ...)
 
     for (i in 1:maxrm) {
       ans1 <- readline("Remove any outliers? (y/n) ")
@@ -108,7 +119,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
                                      ifix = NULL)
           } else {
             startval <- getStart4par(std[-iout, xvar], std[-iout, yvar],
-                                     ifix = NULL)
+                                     ifix = NULL, info = info)
           }
         } else {}  # model 5 (6 parameters)
         if (is.na(startval[1])) {
@@ -124,8 +135,16 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
                        control = list(maxit = maxit))
         }
         fitpar <- addParam(fit$par, Alow, asym)
-        plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, iout = iout,
-                bg = bg, smp = smp, ylab = yvar, xlab = "Concentration", ...)
+        #*** INSERTED - is it a useful functionality?
+        smpflag <- rep("", length(smp))
+        mindet <- max(min(std1[, yvar]), fitpar["Alow"])
+        maxdet <- min(max(std1[, yvar]), fitpar["Aup"])
+        smpflag[!(mindet <= smp & smp <= maxdet)] <- "min"
+        plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,  #***
+                smp = smp, smpflag = smpflag, ylab = yvar, xlab = "Concentration", ...)
+        #*** end INSERTED, uncomment plotFit() below
+#        plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, iout = iout,
+#                bg = bg, smp = smp, ylab = yvar, xlab = "Concentration", ...)
       } else {         # answer no
         if (i == 1) {  # answer no for the first time
           revise <- FALSE
@@ -157,7 +176,8 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
   if (grepl("sig", model)) {
     bounds <- c(bounds, calcBoundsSig(fitpar, range(std[, xvar])))
     if (length(bounds) == 2) {
-      warning("Fit is not good, estimating lower asymptote recommended")
+      warning(paste(info,
+                    "Fit is not good, try estimating lower asymptote if fixed"))
       return(list(par = NULL, bounds = bounds, iout = iout, flag = "no_fit"))
     }
   } else {}
@@ -180,7 +200,16 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
         revise <- TRUE
         flag <- paste(flag, ", lb_manual", sep = "")
         if (!rm.after) {  # no active current plot
-          plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,
+          #*** INSERTED - is it a useful functionality?
+          #***** The problem: what if there IS current plot - add purple to rug???
+          smpflag <- rep("", length(smp))
+          mindet <- max(min(std1[, yvar]), fitpar["Alow"])
+          maxdet <- min(max(std1[, yvar]), fitpar["Aup"])
+          smpflag[!(mindet <= smp & smp <= maxdet)] <- "min"
+          plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,  #***
+                  smp = smp, smpflag = smpflag, ylab = yvar, xlab = "Concentration", ...)
+          #*** end INSERTED, uncomment plotFit() below
+          plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,  #***
                   iout = iout, bg = bg, smp = smp,
                   ylab = yvar, xlab = "Concentration", ...)
           abline(h = bounds[c("lowerbound", "upperbound")], col = rugcols[2],
@@ -192,7 +221,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
       while (revise) {
         mtext("Indicate lower bound with a click", col = "red", cex = 1.2)
         bounds["lowerbound"] <- locator(n = 1)$y
-        plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,
+        plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,    #***
                 iout = iout, bg = bg, smp = smp,
                 ylab = yvar, xlab = "Concentration", ...)
         abline(h = bounds[c("lowerbound", "upperbound")], col = rugcols[2],
@@ -212,7 +241,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
         revise <- TRUE
         flag <- paste(flag, ", ub_manual", sep = "")
         if (!(rm.after || overlower || overwrite.bounds)) {  # no active plot
-          plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,
+          plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,  #***
                   iout = iout, bg = bg, smp = smp,
                   ylab = yvar, xlab = "Concentration", ...)
           abline(h = bounds[c("lowerbound", "upperbound")], col = rugcols[2],
@@ -224,7 +253,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
       while (revise) {
         mtext("Indicate upper bound with a click", col = "red", cex = 1.2)
         bounds["upperbound"] <- locator(n = 1)$y
-        plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,
+        plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,    #***
                 iout = iout, bg = bg, smp = smp,
                 ylab = yvar, xlab = "Concentration", ...)
         abline(h = bounds[c("lowerbound", "upperbound")], col = rugcols[2],

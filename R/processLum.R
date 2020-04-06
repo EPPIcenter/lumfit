@@ -153,5 +153,7 @@ processLum <- function(antigen, fname, fdir = NULL, plotdir = NULL,
   }
   dev.off()
   options(warn = 0)
-  return(list(smps = smps, fitflag = finfit$flag))
+#  return(list(smps = smps, fitflag = finfit$flag))  #*** if not below
+  #***================ optional: number of trimmed samples =================***#
+  return(list(smps = smps, fitflag = finfit$flag, ntrim = sum(smps$trimmed)))
 }
