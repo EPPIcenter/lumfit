@@ -76,7 +76,8 @@
 #'   the results; the second is a character string with a flag containing
 #'   information about removed points, failure to fit the model, manually set
 #'   bounds, and/or an optional custom note provided by the user during an
-#'   interactive model-fitting procedure.
+#'   interactive model-fitting procedure. ***optional return of the number of
+#'   trimmed samples (then a list of length three)***
 #'
 #' @examples
 #'
@@ -94,6 +95,7 @@ processLum <- function(antigen, fname, fdir = NULL, plotdir = NULL,
                        interactive = TRUE, monot.prompt = FALSE,
                        rm.before = FALSE, rm.after = interactive, maxrm = 2,
                        set.bounds = interactive, overwrite.bounds = FALSE,
+#                       bad.fit = "stop",  #*** include? # or "warn"
                        ifix = NULL, dtype = "Median", stdstr = "std|stand",
                        bgstr  = "blank|background", stddil = NULL,
                        smpdil = 1000, optmethod = "Nelder-Mead", maxit = 5e3,

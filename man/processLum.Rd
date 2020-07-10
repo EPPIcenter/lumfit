@@ -119,7 +119,8 @@ A list of length two. The first element is a data frame that contains
   the results; the second is a character string with a flag containing
   information about removed points, failure to fit the model, manually set
   bounds, and/or an optional custom note provided by the user during an
-  interactive model-fitting procedure.
+  interactive model-fitting procedure. ***optional return of the number of
+  trimmed samples (then a list of length three)***
 }
 \description{
 Process data for a single antigen: fit a standard curve, establish bounds,

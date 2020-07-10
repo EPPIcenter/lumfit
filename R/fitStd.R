@@ -1,3 +1,20 @@
+#' Fit Standards
+#'
+#' Fits a specified function to MFI summary of serial dilutions. Optionally an
+#' interactive procedure that allows to remove outliers, evaluate resulting
+#' fits, perform revisions, and record a message regarding the fit.
+#'
+#' @details to be added
+#'
+#' @param std data frame of standard dilutions
+#' @inheritParams processLum
+#'
+#' @return A list containing parameters of the fit and bounds of the fit (named
+#'   vectors), as well as indices of removed points (if any) and flags r.
+#'
+#' @examples
+#'
+#' @export
 
 fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
                    interactive = TRUE, monot.prompt = FALSE,
@@ -318,6 +335,24 @@ makeLsopt <- function(x, y, Alow = NULL, asym = TRUE) {
   return(lsopt)
 }
 
+#' Calculate Bounds Numerically
+#'
+#' Numerically finds roots for 4th derivative of the model function that are
+#' used to indicate "flat" portions of the curve.
+#'
+#' @details to be added
+#'
+#' @param FUNmod model function
+#' @param par    values of function parameters
+#' @param xrange range of function domain to be searched for roots
+#' @param seql   length of the search grid
+#'
+#' @return A named list with upper and lower bounds.
+#'
+#' @examples
+#'
+#' @export
+
 # General (might be out if not needed for non-sigmoid model)
 calcBounds <- function(FUNmod, par, xrange, seql = 200) {
   x <- seq(min(xrange), max(xrange), length = seql)
@@ -343,6 +378,21 @@ f4deriv <- function(x, X0, s, a) {
   w <- exp((X0 - x)/s)
   (a^3*w^3 - 6*a^2*w^2 - 4*a*w^2 + 7*a*w - w^2 + 4*w - 1)*a*w/(1 + w)^(a + 4)
 }
+
+#' Calculate Bounds for Logistic function
+#'
+#' Calculates roots for 4th derivative of logistic function that are used to
+#' indicate "flat" portions of the curve.
+#'
+#' @details to be added
+#'
+#' @inheritParams calcBounds
+#' @return A named list with upper and lower bounds.
+#'
+#' @examples
+#'
+#' @export
+
 calcBoundsSig <- function(par, xrange) {
   wrange <- f4deriv(xrange, par["Xmid"], par["Scale"], par["a"])
   if (any(!is.finite(wrange))) return(NULL)

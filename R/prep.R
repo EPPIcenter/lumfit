@@ -8,7 +8,7 @@
 #'   standard concentrations in "1/dilution" format (e.g. "1/200").
 #' @param dilut standard dilutions to use for standard curve fitting. If
 #'   \code{NULL}, all the dilutions indicated in a "Sample" variable are used.
-#' @inherit processLum params
+#' @inheritParams processLum
 #'
 #' @return A list with standards for fitting, background values, sample values,
 #'   indices for samples, and a data frame - for a specified antigen.

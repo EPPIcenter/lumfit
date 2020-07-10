@@ -1,3 +1,22 @@
+#' Normalize Samples
+#'
+#' Calculate sample concentration based on the fit of standard dilutions.
+#'
+#' @details
+#'
+#' @param dfout   data frame containing samples
+#' @param pdate   date of the processing
+#' @param FUNinv  inverse function to infer sample concentration
+#' @param par     values of model function parameters
+#' @param bounds  named vector with values for extrema and bounds indicating
+#'   "flat" regions of the curve
+#' @param fitflag flag for the fit as returned by \code{fitStd}
+#' @inheritParams processLum
+#'
+#' @return a data frame
+#'
+#' @export
+
 normalizeSmp <- function(dfout, antigen, fname, pdate, yvar, FUNinv, par,
                          bounds, fitflag, trim.flat = TRUE) {
   smps             <- dfout

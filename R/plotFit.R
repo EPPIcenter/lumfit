@@ -5,6 +5,24 @@ locatePt <- function(ptx, pty, datx, daty) {
   indmin[which.min(abs(pty - daty[indmin]))]   # single
 }
 
+#' Plot the fit for standards and the samples
+#'
+#' Produces a plot that includes points for standards, proposed fit, removed outliers, bounds for "flat" portions of the curve, and values for samples and for the background.
+#'
+#' @details to be added
+#'
+#' @param fitpar  values of function parameters
+#' @param FUNmod model function
+#' @param bg      background values
+#' @param smp     sample values
+#' @param smpflag character vector, flags for each sample
+#' @param trimval for final results, the values at which the samples are trimmed
+#' @param trimext integer vector of length two indicating if the values are trimmed at the extremum (lower and upper)
+#' @inheritParams processLum
+#' @inheritParams fitStd
+#'
+#' @export
+
 plotFit <- function(xvar, yvar, std, fitpar = NULL, FUNmod = NULL, iout = NULL,
                     bg = NULL, smp = NULL, smpflag = NULL, trimval = NULL,
                     trimext = NULL, ptcol = "firebrick3",
