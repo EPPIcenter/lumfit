@@ -31,7 +31,7 @@ plotFit <- function(xvar, yvar, std, fitpar = NULL, FUNmod = NULL, iout = NULL,
     ylim <- range(std[, yvar], smp, log(bg), na.rm = TRUE)
     plot(std[, xvar], std[, yvar], col = ptcol, xaxt = "n", ylim = ylim, ...)
   } else {
-    plot(std[, xvar], std[, yvar], col = col, xaxt = "n", ...)
+    plot(std[, xvar], std[, yvar], col = ptcol, xaxt = "n", ...)
   }
   if(!is.null(smp)) {
     rug(smp, side = 2, col = rugcols[1])

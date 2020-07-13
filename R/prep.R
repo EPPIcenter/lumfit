@@ -1,4 +1,4 @@
-#' Extract Stdandards
+#' Extract Standards
 #'
 #' Separates specified serial dilutions for fitting, background, and samples
 #'
