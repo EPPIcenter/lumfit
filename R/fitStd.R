@@ -6,7 +6,10 @@
 #'
 #' @details to be added
 #'
-#' @param std data frame of standard dilutions
+#' @param std  data frame of standard dilutions
+#' @param bg   background values
+#' @param smp  sample values
+#' @param info information about a particular run for warning messages.
 #' @inheritParams processLum
 #'
 #' @return A list containing parameters of the fit and bounds of the fit (named
@@ -21,7 +24,7 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
                    rm.before = FALSE, rm.after = interactive, maxrm = 2,
                    set.bounds = FALSE, overwrite.bounds = FALSE, bg = NULL,
                    smp = NULL, optmethod = "Nelder-Mead", maxit = 5e3,
-                   info = "", ifix = NULL, rugcols, ...) {
+                   info = "", ifix = NULL, rugcols, ptcol, ...) {
   if (!is.null(Alow) && Alow == "bg") Alow <- mean(log(bg))  #*** or log(mean(bg))
   flag <- ""
   iout <- NULL
@@ -41,8 +44,8 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
   }
 
   if (rm.before) {
-    plotFit(xvar, yvar, std, bg = bg, smp = smp,
-            ylab = yvar, xlab = "Concentration", ...)
+    plotFit(xvar, yvar, std, bg = bg, smp = smp, rugcols = rugcols,
+            ptcol = ptcol, ylab = yvar, xlab = "Concentration", ...)
     for (i in 1:maxrm) {
       ans1 <- readline("Remove any outliers? (y/n) ")
       if (tolower(ans1) == "y"){
@@ -116,11 +119,13 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
     maxdet <- min(max(std1[, yvar]), fitpar["Aup"])
     smpflag[!(mindet <= smp & smp <= maxdet)] <- "min"
     plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,  #***
-            smp = smp, smpflag = smpflag, ylab = yvar, xlab = "Concentration", ...)
+            smp = smp, smpflag = smpflag, rugcols = rugcols, ptcol = ptcol,
+            ylab = yvar, xlab = "Concentration", ...)
     #*** end INSERTED, uncomment plotFit() below
 
 #    plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,  #***
-#            smp = smp, ylab = yvar, xlab = "Concentration", ...)
+#            smp = smp, rugcols = rugcols, ptcol = ptcol,
+#            ylab = yvar, xlab = "Concentration", ...)
 
     for (i in 1:maxrm) {
       ans1 <- readline("Remove any outliers? (y/n) ")
@@ -158,10 +163,12 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
         maxdet <- min(max(std1[, yvar]), fitpar["Aup"])
         smpflag[!(mindet <= smp & smp <= maxdet)] <- "min"
         plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,  #***
-                smp = smp, smpflag = smpflag, ylab = yvar, xlab = "Concentration", ...)
+                smp = smp, smpflag = smpflag, rugcols = rugcols, ptcol = ptcol,
+                ylab = yvar, xlab = "Concentration", ...)
         #*** end INSERTED, uncomment plotFit() below
 #        plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, iout = iout,
-#                bg = bg, smp = smp, ylab = yvar, xlab = "Concentration", ...)
+#                bg = bg, smp = smp, rugcols = rugcols, ptcol = ptcol,
+#                ylab = yvar, xlab = "Concentration", ...)
       } else {         # answer no
         if (i == 1) {  # answer no for the first time
           revise <- FALSE
@@ -224,11 +231,12 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
           maxdet <- min(max(std1[, yvar]), fitpar["Aup"])
           smpflag[!(mindet <= smp & smp <= maxdet)] <- "min"
           plotFit(xvar, yvar, std, fitpar = fitpar, FUNmod = FUNmod, bg = bg,  #***
-                  smp = smp, smpflag = smpflag, ylab = yvar, xlab = "Concentration", ...)
+                  smp = smp, smpflag = smpflag, rugcols = rugcols,
+                  ptcol = ptcol, ylab = yvar, xlab = "Concentration", ...)
           #*** end INSERTED, uncomment plotFit() below
           plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,  #***
-                  iout = iout, bg = bg, smp = smp,
-                  ylab = yvar, xlab = "Concentration", ...)
+                  iout = iout, bg = bg, smp = smp, rugcols = rugcols,
+                  ptcol = ptcol, ylab = yvar, xlab = "Concentration", ...)
           abline(h = bounds[c("lowerbound", "upperbound")], col = rugcols[2],
                  lty = 4)
           legend("right", bty = "n", cex = 0.9, col = rugcols[2], lty = 4,
@@ -239,8 +247,8 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
         mtext("Indicate lower bound with a click", col = "red", cex = 1.2)
         bounds["lowerbound"] <- locator(n = 1)$y
         plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,    #***
-                iout = iout, bg = bg, smp = smp,
-                ylab = yvar, xlab = "Concentration", ...)
+                iout = iout, bg = bg, smp = smp, rugcols = rugcols,
+                ptcol = ptcol, ylab = yvar, xlab = "Concentration", ...)
         abline(h = bounds[c("lowerbound", "upperbound")], col = rugcols[2],
                lty = 4)
         legend("right", bty = "n", cex = 0.9, col = rugcols[2], lty = 4,
@@ -259,8 +267,8 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
         flag <- paste(flag, ", ub_manual", sep = "")
         if (!(rm.after || overlower || overwrite.bounds)) {  # no active plot
           plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,  #***
-                  iout = iout, bg = bg, smp = smp,
-                  ylab = yvar, xlab = "Concentration", ...)
+                  iout = iout, bg = bg, smp = smp, rugcols = rugcols,
+                  ptcol = ptcol, ylab = yvar, xlab = "Concentration", ...)
           abline(h = bounds[c("lowerbound", "upperbound")], col = rugcols[2],
                  lty = 4)
           legend("right", bty = "n", cex = 0.9, col = rugcols[2], lty = 4,
@@ -271,8 +279,8 @@ fitStd <- function(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
         mtext("Indicate upper bound with a click", col = "red", cex = 1.2)
         bounds["upperbound"] <- locator(n = 1)$y
         plotFit(xvar, yvar, std, fitpar = fit$par, FUNmod = FUNmod,    #***
-                iout = iout, bg = bg, smp = smp,
-                ylab = yvar, xlab = "Concentration", ...)
+                iout = iout, bg = bg, smp = smp, rugcols = rugcols,
+                ptcol = ptcol, ylab = yvar, xlab = "Concentration", ...)
         abline(h = bounds[c("lowerbound", "upperbound")], col = rugcols[2],
                lty = 4)
         legend("right", bty = "n", cex = 0.9, col = rugcols[3:2], lty = 4,

@@ -12,9 +12,8 @@ locatePt <- function(ptx, pty, datx, daty) {
 #' @details to be added
 #'
 #' @param fitpar  values of function parameters
-#' @param FUNmod model function
-#' @param bg      background values
-#' @param smp     sample values
+#' @param FUNmod  model function
+#' @param iout    indices of removed standard points.
 #' @param smpflag character vector, flags for each sample
 #' @param trimval for final results, the values at which the samples are trimmed
 #' @param trimext integer vector of length two indicating if the values are trimmed at the extremum (lower and upper)

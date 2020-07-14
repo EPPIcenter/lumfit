@@ -2,7 +2,7 @@
 % Please edit documentation in R/prep.R
 \name{extractStd}
 \alias{extractStd}
-\title{Extract Stdandards}
+\title{Extract Standards}
 \usage{
 extractStd(MFI, stdstr, bgstr, dilut, smpdil, antigen, yvar)
 }

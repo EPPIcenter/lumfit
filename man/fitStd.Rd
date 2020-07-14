@@ -9,7 +9,7 @@ fitStd(std, xvar, yvar, model = "sigmoid", Alow = NULL, asym = TRUE,
   rm.after = interactive, maxrm = 2, set.bounds = FALSE,
   overwrite.bounds = FALSE, bg = NULL, smp = NULL,
   optmethod = "Nelder-Mead", maxit = 5000, info = "", ifix = NULL,
-  rugcols, ...)
+  rugcols, ptcol, ...)
 }
 \arguments{
 \item{std}{data frame of standard dilutions}
@@ -59,9 +59,15 @@ appears even if \code{interactive} is \code{FALSE}.}
 \item{overwrite.bounds}{logical value indicating the option to overwrite
 automatically set bounds. Ignored if \code{interactive} is \code{FALSE}.}
 
+\item{bg}{background values}
+
+\item{smp}{sample values}
+
 \item{optmethod}{method to be used in optimization.}
 
 \item{maxit}{maximum number of iterations in optimization.}
+
+\item{info}{information about a particular run for warning messages.}
 
 \item{ifix}{sorted integer vector of length 3 with indices of standards to be
 used for getting starting values for optimization.}
@@ -69,6 +75,8 @@ used for getting starting values for optimization.}
 \item{rugcols}{vector of three colors for the rugplot, which indicates sample
 values (inside the bounds, between the bounds and extrema, and beyond
 extrema).}
+
+\item{ptcol}{color of the standard points on the plot.}
 
 \item{...}{further graphical parameters.}
 }

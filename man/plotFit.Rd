@@ -22,6 +22,8 @@ curve.}
 
 \item{FUNmod}{model function}
 
+\item{iout}{indices of removed standard points.}
+
 \item{bg}{background values}
 
 \item{smp}{sample values}
